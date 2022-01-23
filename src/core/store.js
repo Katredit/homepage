@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import router from './router'
 
 Vue.use(Vuex);
 
@@ -19,11 +21,81 @@ export default new Vuex.Store({
             Oturum Kazancı taksimetre açıldıktan sonra toplanan hasılatın tamamını ifade eder eğer oturum kazancını sıfırlamak isterseniz 'Oturum Kazancını Sıfırla' seçeneğine çift tıklayarak toplam kazancı sıfırlayabilirsiniz
             ### Sistem Videosu
             [![](https://i.hizliresim.com/3qe39d2.png)](https://www.youtube.com/embed/5JSb2NhXxFc)`}
-        ]
+        ],
+        token : '',
+    },
+    mutations : {
+        setToken(state , token){
+            state.token = token
+        },
+        clearToken(state){
+            state.token = ''
+        }
+    },
+    actions : {
+
+        initAuth({commit, dispatch}){
+
+            let token = localStorage.getItem('token');
+            if(token){
+
+                let expirationDate = localStorage.getItem('expirationDate');
+                let time = new Date().getTime();
+
+                if(time >= +expirationDate){
+                    dispatch('logout');
+                }else{
+
+                    commit('setToken' , token);
+
+                    let timerSecond = +expirationDate - time
+                    dispatch('setTimeoutTimer' , timerSecond);
+
+                    if(router.currentRoute.name != 'adminHome')
+                        router.push({name : 'adminHome'});
+
+                }
+
+            }else{
+                router.push({name : 'adminLogin'});
+            }
+
+        },
+
+        login({commit , dispatch , state} , params){
+            axios.post('/login' , params).then((res) => {
+                if(res.data.token){
+                    commit('setToken' , res.data.token);
+                    localStorage.setItem('token' , state.token);
+                    localStorage.setItem('expirationDate' , new Date().getTime() + 1000*60*10);
+                    dispatch('setTimeoutTimer' , 1000*60*10)
+                    router.push({name : 'adminHome'});
+                }
+            })
+        },
+
+        logout({commit}){
+            commit('clearToken');
+            localStorage.removeItem('token');
+            router.push({name : 'adminLogin'});
+        },
+
+        setTimeoutTimer({dispatch} , maxAge){
+            setTimeout(() => {
+                dispatch('logout');
+            } , maxAge)
+        }
+
     },
     getters : {
+
         getProjectFromID: (state) => (id) => {
             return state.projects.find(project => project.id == id);
+        },
+
+        isAuthenticated(state){
+            return state.token !== ''
         }
+
     }
 })

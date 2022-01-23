@@ -81,6 +81,7 @@ export default {
         margin-top: 10px;
         font-size: 15px;
         overflow: auto;
+        overflow-x: hidden;
     }
 
     .description img{
