@@ -4,7 +4,8 @@ import router from './core/router.js'
 import store from './core/store.js'
 import App from './App.vue'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'https://ardadonmez.herokuapp.com'
+// axios.defaults.baseURL = 'http://localhost:3000'
 
 new Vue({
   el: '#app',

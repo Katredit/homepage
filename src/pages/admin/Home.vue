@@ -26,7 +26,7 @@ import editProjects from './components/projects.vue'
 import editUsers from './components/users.vue'
 
 export default {
-    // mixins : [adminMixin],
+    mixins : [adminMixin],
     data(){
         return {
             selectPage : 'edit-projects',

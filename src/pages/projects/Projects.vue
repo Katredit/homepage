@@ -105,6 +105,7 @@ export default {
     }
 
     .project img{
+        width: 48%;
         height: 100%;
         float: right;
         border-top-right-radius: 16px;
@@ -121,6 +122,14 @@ export default {
         .texts .description{
             height: 10vw;
         }
+    }
+
+    @media only screen and (max-width: 1170px) {
+
+        .project img{
+            width: 45%;
+        }
+
     }
 
     @media only screen and (max-width: 1024px) {
@@ -172,7 +181,7 @@ export default {
         }
 
         .project .texts{
-            width: 50%;
+            width: 48%;
         }
 
         .texts .description{
