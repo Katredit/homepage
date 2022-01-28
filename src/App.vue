@@ -122,6 +122,80 @@ export default {
         color: #B7B7B7;
     }
 
+    .primary{
+        background: dodgerblue;
+    }
+
+    .primary:hover{
+        background: #54aaff;
+    }
+
+    .danger{
+        background: firebrick;
+    }
+
+    .danger:hover{
+        background: #c54848;
+    }
+
+    .default-btn{
+        border: none;
+        outline: none;
+        color: #fff;
+        font-family: 'Inter';
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 4px;
+        margin-right: 5px;
+        transition: .15s;
+    }
+
+    .search{
+        width: 25%;
+    }
+
+    .search .fal{
+        position: absolute;
+        color: #B7B7B7;
+        left: 5px;
+        top: 8px;
+        font-size: 16px;
+    }
+
+    .search input{
+        position: relative;
+        outline: none;
+        border: none;
+        background: #3B3B3E;
+        color: #fff;
+        width: calc(100% - 56px);
+        height: 30px;
+        margin-bottom: 10px;
+        padding: 0 28px;
+        font-family: 'Inter';
+        font-size: 15px;
+        border-radius: 4px;
+        transition: .15s;
+    }
+
+    .markdown img{
+        max-width: 100%;
+    }
+
+    .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6{
+        color: #fff;
+    } 
+
+    code{
+        position: relative;
+        display: inline-block;
+        color: #fff;
+        background: #3B3B3E;
+        padding: 7px;
+        border-radius: 4px;
+    }
+
+
     @media only screen and (max-width:768px){
 
         .app{

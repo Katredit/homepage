@@ -10,12 +10,12 @@
             <div class="project" v-for="project in projects" :key="project.id">
                 <div class="texts">
                     <div class="title-3"><b>{{project.title}}</b></div>
-                    <div class="description gray">
+                    <div class="description gray markdown">
                         <vue-marked>
                             {{project.description}}
                         </vue-marked>
                     </div>
-                    <button @click='readMore(project.id)'>Devamını oku</button>
+                    <button class="primary" @click='readMore(project.id)'>Devamını oku</button>
                 </div>
                 <img :src="project.thumbnail">
             </div>
@@ -41,7 +41,9 @@ export default {
         }
     },
     created(){
-        this.projects = this.$store.state.projects;
+        this.$store.dispatch('getProjects').then((res) => {
+            this.projects = res;
+        });
     },
     components: {
         VueMarked
@@ -95,16 +97,11 @@ export default {
         top: 15px;
         outline: none;
         border: none;
-        background: dodgerblue;
         color: #fff;
         border-radius: 8px;
         height: 35px;
         font-family: 'Inter';
         transition: .2s;
-    }
-
-    .texts button:hover{
-        background: #54aaff;
     }
 
     .project img{

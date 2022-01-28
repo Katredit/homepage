@@ -12,7 +12,7 @@
             <input v-model="password" name="password" type="password" placeholder="Şifre">
             <br>
 
-            <button @click="login()">Giriş yap --></button>
+            <button class="primary" @click="login()">Giriş yap --></button>
 
         </div>
 
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
     .center{
         left: 50%;
@@ -68,13 +68,8 @@ export default {
 
     button{
         padding: 0;
-        background: dodgerblue;
         color: #fff;
         margin-top: 10px;
-    }
-
-    button:hover{
-        background: #54aaff;
     }
 
     @media only screen and (max-width: 768px) {
