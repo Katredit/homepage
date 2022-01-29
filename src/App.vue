@@ -191,8 +191,18 @@ export default {
         display: inline-block;
         color: #fff;
         background: #3B3B3E;
-        padding: 7px;
+        padding: 7px 4px;
         border-radius: 4px;
+        margin-bottom: 1px;
+        margin-top: 1px;
+    }
+
+    a:link {
+        color: dodgerBlue;
+    }
+
+    a:visited {
+        color: dodgerBlue;
     }
 
 

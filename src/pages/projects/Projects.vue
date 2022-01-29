@@ -42,6 +42,7 @@ export default {
     },
     created(){
         this.$store.dispatch('getProjects').then((res) => {
+            res.sort(function(a, b){return b.id-a.id})
             this.projects = res;
         });
     },
