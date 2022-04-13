@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {adminMixin} from '../../mixins/adminMixins'
+import {adminMixin} from '../../mixins/adminMixin'
 import axios from 'axios'
 import VueMarked from 'vue-marked'
 

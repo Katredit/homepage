@@ -13,6 +13,8 @@
             <br>
 
             <button class="primary" @click="login()">Giriş yap --></button>
+            <br>
+            <button class="primary register" @click="register()">Hesabın yok mu? --></button>
 
         </div>
 
@@ -21,23 +23,26 @@
 </template>
 
 <script>
-import {adminMixin} from '../../mixins/adminMixin'
+import {bannerMixin} from '../../mixins/bannerMixin'
 export default {
-    name : 'adminLogin',
-    mixins : [adminMixin],
+    name : 'bannerLogin',
+    mixins : [bannerMixin],
     data(){
         return {
             username : '',
             password : '',
-        }
+        }  
     },
     methods : {
         login(){
             this.$store.dispatch('login' , {
-                rotate : 'admin',
+                rotate : 'banner',
                 username : this.username,
                 password : this.password
             })
+        },
+        register(){
+            this.$router.push({name : 'bannerRegister'})
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     
     <div class="pages-edit-projects">
-        <span class="title-3"><b>Admin panele hoşgeldin!</b></span>
+        <span class="title-3"><b>Projelerim</b></span>
         <br>
         <br>
         <button class="primary default-btn" @click="projectCreate()">Yeni proje oluştur!</button>
@@ -10,15 +10,15 @@
             <i class="fal fa-search"></i>
         </div>
 
-        <div class="projects">
+        <div class="table">
 
-            <div class="project table">
+            <div class="table-div table-title">
                 <div class="name"><b>Başlık</b></div>
                 <div class="little-description"><b>Açıklama</b></div>
                 <div class="process"><b>Düzenle/Sil</b></div>
             </div>
 
-            <div class="project" v-for="project in projects" :key="project.name">
+            <div class="table-div" v-for="project in projects" :key="project.name">
                 <div class="name"><span>{{project.title}}</span></div>
                 <div class="little-description"> {{project.description | sliceText}} </div>
                 <div class="process">
@@ -82,63 +82,9 @@ export default {
 
 <style scoped>
 
-    .projects{
-        position: relative;
-        margin-top: 35px;
-        width: 100%;
-    }
-
-    .project{
-        position: relative;
-        float: none;
-        margin-bottom: 15px;
-    }
-
-    .project{
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .project div{
-        color: #fff;
-        position: relative;
-        float: left;
-        color: #fff;
-        text-align: center;
-        width: 30%;
-        height: 45px;
-        /* line-height: 45px; */
-    }
-
-    .table div{
-        width: 30%;
-        background: #3B3B3E;
-        line-height: 40px;
-        height: 40px;
-        border-radius: 6px;
-    }
-
-    .project div:nth-child(1), .project div:nth-child(3){
-        width: 24%;
-    }
-
-    .project div:nth-child(2){
-        width: 44%;
-    }
-
-    .project div button{
-        margin-bottom: 10px;
-    }
-
     .search{
         position: relative;
         float: right;
-    }
-
-    @media screen and (max-width: 600px) {
-        .project div{
-            font-size: 14px;
-        }
     }
 
 </style>

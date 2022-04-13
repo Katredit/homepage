@@ -3,39 +3,24 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import router from './router'
 
+import {banner} from './modules/banner'
+
+const config = {
+    maxAge : {
+        banner : 1000 * 60 * 60,
+        admin : 1000 * 60 * 10,
+        user : 1000 * 60 * 30
+    }
+}
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    modules : {banner},
     state : {
-        projects : [{id : 1, title : 'MTA:SA Taksi Sistemi' , thumbnail : 'https://i.hizliresim.com/3qe39d2.png' , description : 
-            
-        `MTA:SA platformu için yapılan roleplay konseptli sunucular için bir taksi sistemi, roleplay konseptli sunucular için yapılan bu sistem oyuncular için kolaylık sağlar ve rol ortamı oluşmasına kolaylık sağlar.
-
-        ### Nasıl taksi plakası satın alınır?
-
-        /plakasatinal ile belirli bir bölgeden taksi paneli alınabilir. Satın alma bölgesini ise sistem içerisindeki dosyalardan ayarlayabilirsiniz.
-
-        ### Nasıl çalışır?
-
-        /taksi yazarak genel paneli açabilirsiniz ve panel içerisindeki 'Taksimetre' seçeniğine taksimetrenizi aktif hale getirebilirsiniz. Taksimetreyi açtıktan sonra toplan gelirinizi panelden 'Oturum Kazancı' adı altında görüntüleyebilirsiniz. 'Taksi Tabelası Yerleştir' seçeneğine çift tıklayarak aracanıza eğer taksimetresi açıksa tabela yerleştirebilirsiniz
-
-        ### Taksi nasıl çağırılır ve talepler nasıl görüntülenir?
-
-        /taksicagir ile taksi çağrısında bulunabilirsiniz. Herhangi bir taksi çağrısı olduğu zaman taksimetresi açık olan taksi şöförlerine bildirim gitmektedir. Taksi paneli üzerinden 'Taksi Talepleri' seçeneğine çift tıklayarak gelen taksi taleplerine geri dönüşte bulunabilirsiniz
-
-        ### Taksimetre ücreti nasıl ayarlanır?
-
-        Taksi paneli üzerinden 'Taksimetre Ücretini Ayarla' seçeneğine çift tıklayarak kilometre başına alacağınız ücreti belirleyebilirsiniz
-
-        ### Oturum Kazancı nedir?
-
-        Oturum Kazancı taksimetre açıldıktan sonra toplanan hasılatın tamamını ifade eder eğer oturum kazancını sıfırlamak isterseniz 'Oturum Kazancını Sıfırla' seçeneğine çift tıklayarak toplam kazancı sıfırlayabilirsiniz
-
-        ### Sistem Videosu
-
-        [![](https://i.hizliresim.com/3qe39d2.png)](https://www.youtube.com/embed/5JSb2NhXxFc)`
-    }],
+        projects : [],
         token : '',
+        inputError : {}
     },
     mutations : {
         setToken(state , token){
@@ -43,54 +28,99 @@ export default new Vuex.Store({
         },
         clearToken(state){
             state.token = ''
+        },
+        setError(state , error){
+            state.inputError = error;
         }
     },
     actions : {
 
-        initAuth({commit, dispatch}){
+        initAuth({commit, dispatch} , params){
 
             let token = localStorage.getItem('token');
             if(token){
 
-                let expirationDate = localStorage.getItem('expirationDate');
-                let time = new Date().getTime();
+                if(params.page == 'admin'){
 
-                if(time >= +expirationDate){
-                    dispatch('logout');
+                    let expirationDate = localStorage.getItem('expirationDate');
+                    let time = new Date().getTime();
+
+                    if(time >= +expirationDate){
+                        return dispatch('logout');
+                    }
+
+                    if(localStorage.getItem('admin').toString() == 'true'){
+                        axios.post('/admin/check' , {token}).then((response) => {
+                            if(!response && !response.data && !response.data.success){
+                                return false;
+                            }
+
+                            commit('setToken' , token);
+
+                            let timerSecond = +expirationDate - time
+                            dispatch('setTimeoutTimer' , timerSecond);
+
+                            if(router.currentRoute.name != 'adminHome')
+                                router.push({name : 'adminHome'});
+
+                            return token;
+                        });
+                    }else{
+                        return dispatch('logout');
+                    }
+
                 }else{
-
                     commit('setToken' , token);
-
-                    let timerSecond = +expirationDate - time
-                    dispatch('setTimeoutTimer' , timerSecond);
-
-                    if(router.currentRoute.name != 'adminHome')
-                        router.push({name : 'adminHome'});
-
+                    return token;
                 }
 
             }else{
-                router.push({name : 'adminLogin'});
+                router.push({name : params.page+'Login'});
             }
 
         },
 
-        login({commit , dispatch , state} , params){
-            axios.post('/admin/login' , params).then((res) => {
+        login({commit , dispatch} , params){
+            axios.post('/'+params.rotate+'/login' , params).then((res) => {
                 if(res.data.token){
                     commit('setToken' , res.data.token);
-                    localStorage.setItem('token' , state.token);
-                    localStorage.setItem('expirationDate' , new Date().getTime() + 1000*60*10);
-                    dispatch('setTimeoutTimer' , 1000*60*10)
-                    router.push({name : 'adminHome'});
+                    dispatch('setLoginData' , params)
+                    localStorage.setItem('admin' , res.data.admin ? true : false);
                 }
             })
+        },
+
+        register({commit , dispatch , state} , params){
+            axios.post('/'+params.rotate+'/register' , params).then((res) => {
+
+                if(res.data.error){
+                    state.inputError = res.data.error;
+                }else if(res.data.token){
+                    commit('setToken' , res.data.token);
+                    dispatch('setLoginData' , params)
+                    state.inputError = {};
+                }
+
+            })
+        },
+
+        setLoginData({state, dispatch} , params){
+            localStorage.setItem('token' , state.token);
+            localStorage.setItem('admin' , false);
+
+            if(params.rotate == 'admin'){
+                localStorage.setItem('expirationDate' , new Date().getTime() + config.maxAge[params.rotate]);
+                dispatch('setTimeoutTimer' , config.maxAge[params.rotate])
+            }
+
+            router.push({name : params.rotate+'Home'});
         },
 
         logout({commit}){
             commit('clearToken');
             localStorage.removeItem('token');
-            router.push({name : 'adminLogin'});
+            localStorage.removeItem('admin');
+            router.push({name : 'Home'});
         },
 
         setTimeoutTimer({dispatch} , maxAge){

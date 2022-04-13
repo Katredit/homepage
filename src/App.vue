@@ -31,6 +31,7 @@ export default {
             routers : [
                 {link : '/' , name : 'Anasayfa'},
                 {link : '/projects' , name : 'Projelerim'},
+                {link : '/bannercreator' , name : 'Banner Creator for Twitter'},
             ]
         }
     }
@@ -130,6 +131,10 @@ export default {
         background: #54aaff;
     }
 
+    .disabled, button:disabled{
+        background: #6d6d6d;
+    }
+
     .danger{
         background: firebrick;
     }
@@ -205,6 +210,71 @@ export default {
         color: dodgerBlue;
     }
 
+    .pages-login .center{
+        left: 50%;
+        top: 50%;
+        text-align: center;
+    }
+
+    .pages-login input, .pages-login button{
+        position: relative;
+        outline: none;
+        border: none;
+        background: #3B3B3E;
+        color: #B7B7B7;
+        width: 330px;
+        height: 35px;
+        margin-bottom: 10px;
+        padding: 0 10px;
+        font-family: 'Inter';
+        font-size: 15px;
+        border-radius: 4px;
+        transition: .15s;
+    }
+
+    .error-box input{
+        margin: 0;
+        border: 1px solid #ff3b3b;
+    }
+    
+    .error-box{
+        margin-bottom: 10px;
+    }
+
+    .pages-login label{
+        display: none;
+    }
+
+    .error-box label{
+        display: block;
+        position: relative;
+        font-size: 12px;
+        margin-top: 5px;
+        color: #ff3b3b;
+    }
+
+    .pages-login button{
+        padding: 0;
+        color: #fff;
+        margin-top: 10px;
+        width: 300px;
+    }
+
+    .pages-login .register{
+        margin-top: 3px;
+        width: auto;
+        background: none;
+        text-decoration: underline;
+    }
+
+    .pages-login .register:hover{
+        color: #54aaff;
+    }
+
+    .default-btn .fas, .default-btn .fab{
+        position: relative;
+        left: -2px;
+    }
 
     @media only screen and (max-width:768px){
 
@@ -213,6 +283,10 @@ export default {
             width: 90%;
             margin: 0;
             margin-left: 5%;
+        }
+
+        .pages-login input, .pages-login button{
+            width: 80%;
         }
 
     }
